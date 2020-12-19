@@ -1,15 +1,7 @@
 import textract
-text = (textract.process('Summer 2018 Public Results.pdf')).decode("utf-8")
-# text = (textract.process('Fall 2015 - 2016 WEB.pdf')).decode("utf-8")
-
-pages = text.split(chr(12)) # this char splits pages
-# for page in pages:
-#     sections = page.split('\n\n')
-#     for section in sections:
-#         # print(section)
-#         print("----------------------------------")
-#     break
-
+# import wget
+import urllib.request
+import os
 import xlsxwriter
 
 # Create a workbook and add a worksheet.
@@ -26,42 +18,79 @@ worksheet.add_table('A1:F2', {'columns': [{'header': 'Course Name'},
 
 currentLine = 2
 
-for page in pages:
-    sections = page.split('\n\n')
-    try:
-        courseNames = sections[0].split('\n')
-        firstNames = sections[1].split('\n')
-        lastNames = sections[2].split('\n')
-        courseVal = sections[3].split('\n')
-        instrVal = sections[4].split('\n')
-        hoursStudied = sections[5].split('\n')
+urls = [
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Fall%202015%20-%202016%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Winter%202015%202016%20Web.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202015-2016%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Fall%202016-2017%20Web.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Winter%202016-2017%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202016-2017.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%20I%202016-2017%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%20II%202016-2017%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Fall%202017%202018%20WEB.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Winter%202017-2018%20WEB1.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202018%20Public%20Results.pdf',
+    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%202018%20Public%20Results.pdf'
+]
 
-        for num in range(len(courseNames)):
-            worksheet.write_row('A' + str(currentLine), [courseNames[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
-            currentLine += 1
-    except:
-        pass # last page
+for filename in os.listdir('./PDFs'):
+    if filename.endswith('.pdf'):
+        # print(filename)
+        text = textract.process('./PDFs/' + filename).decode("utf-8")
 
-# # Some data we want to write to the worksheet.
-# expenses = (
-#     ['Rent', 1000],
-#     ['Gas',   100],
-#     ['Food',  300],
-#     ['Gym',    50],
-# )
+        pages = text.split(chr(12)) # this char splits pages
+        # for page in pages:
+        #     sections = page.split('\n\n')
+        #     for section in sections:
+        #         # print(section)
+        #         print("----------------------------------")
+        #     break
 
-# # Start from the first cell. Rows and columns are zero indexed.
-# row = 0
-# col = 0
+        pages.pop(0) # remove first page
 
-# # Iterate over the data and write it out row by row.
-# for item, cost in (expenses):
-#     worksheet.write(row, col,     item)
-#     worksheet.write(row, col + 1, cost)
-#     row += 1
+        for page in pages:
+            sections = page.split('\n\n')
+            # print(len(sections))
+            try:
+                courseNames = sections[0].split('\n')
+                for name in courseNames:
+                    if(name.count('-') < 2):
+                        courseNames.remove(name)
 
-# # Write a total using a formula.
-# worksheet.write(row, 0, 'Total')
-# worksheet.write(row, 1, '=SUM(B1:B4)')
+                firstNames = sections[1].split('\n')
+                lastNames = sections[2].split('\n')
+                courseVal = sections[3].split('\n')
+                # print(courseVal)
+                # for val in courseVal:
+                #     try:
+                #         float(val)
+                #         break
+                #     except:
+                #         courseVal.remove(val)
+                #         print(val)
+                instrVal = sections[4].split('\n')
+                # for val in instrVal:
+                #     try:
+                #         float(val)
+                #         break
+                #     except:
+                #         instrVal.remove(val)
+                #         print(val)
+                hoursStudied = sections[5].split('\n')
+                # for val in hoursStudied:
+                #     try:
+                #         float(val)
+                #         break
+                #     except:
+                #         hoursStudied.remove(val)
+                #         print(val)
+
+                for num in range(len(courseNames)):
+                    worksheet.write_row('A' + str(currentLine), [courseNames[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
+                    currentLine += 1
+            except:
+                pass # last page
 
 workbook.close()
+
+# os.rmdir('./temp')
