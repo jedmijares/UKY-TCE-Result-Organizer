@@ -3,12 +3,15 @@ import textract
 import urllib.request
 import os
 import xlsxwriter
+import re
 
 # Create a workbook and add a worksheet.
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
 worksheet = workbook.add_worksheet()
 
-worksheet.add_table('A1:F2', {'columns': [{'header': 'Course Name'},
+worksheet.add_table('A1:H2', {'columns': [{'header': 'Subject'},
+                                          {'header': 'Course Code'},
+                                          {'header': 'Course Title'},
                                           {'header': 'First Name'},
                                           {'header': 'Last Name'},
                                           {'header': 'Course Rating'},
@@ -38,7 +41,7 @@ for filename in os.listdir('./PDFs'):
         # print(filename)
         text = textract.process('./PDFs/' + filename).decode("utf-8")
 
-        pages = text.split(chr(12)) # this char splits pages
+        pages = text.split(chr(12)) # this character splits pages
         # for page in pages:
         #     sections = page.split('\n\n')
         #     for section in sections:
@@ -57,12 +60,14 @@ for filename in os.listdir('./PDFs'):
                 #     if(name.count('-') < 2):
                 #         courseNames.remove(name)
                 # courseCodes[]
+                courseSubjects = []
+                courseCodes = []
                 courseTitles = []
                 for name in courseNames:
+                    # print(int(name))
+                    courseCodes.append(re.search(r'\d+', name).group())
                     courseTitles.append(name.split(' ‐ ')[-1])
-                    # print(name.split('‐')[-1])
-                    # sys.exit()
-                print(courseTitles)
+                    courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
 
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
@@ -91,9 +96,9 @@ for filename in os.listdir('./PDFs'):
                 #     except:
                 #         hoursStudied.remove(val)
                 #         print(val)
-                if len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
+                if len(courseCodes) == len(courseSubjects) == len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
                     for num in range(len(courseTitles)):
-                        worksheet.write_row('A' + str(currentLine), [courseTitles[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
+                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
                         currentLine += 1
                 else:
                     # print(filename)
