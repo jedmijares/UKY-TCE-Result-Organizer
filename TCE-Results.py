@@ -53,9 +53,16 @@ for filename in os.listdir('./PDFs'):
             # print(len(sections))
             try:
                 courseNames = sections[0].split('\n')
+                # for name in courseNames:
+                #     if(name.count('-') < 2):
+                #         courseNames.remove(name)
+                # courseCodes[]
+                courseTitles = []
                 for name in courseNames:
-                    if(name.count('-') < 2):
-                        courseNames.remove(name)
+                    courseTitles.append(name.split(' ‐ ')[-1])
+                    # print(name.split('‐')[-1])
+                    # sys.exit()
+                print(courseTitles)
 
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
@@ -84,10 +91,20 @@ for filename in os.listdir('./PDFs'):
                 #     except:
                 #         hoursStudied.remove(val)
                 #         print(val)
-
-                for num in range(len(courseNames)):
-                    worksheet.write_row('A' + str(currentLine), [courseNames[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
-                    currentLine += 1
+                if len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
+                    for num in range(len(courseTitles)):
+                        worksheet.write_row('A' + str(currentLine), [courseTitles[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
+                        currentLine += 1
+                else:
+                    # print(filename)
+                    # print(courseNames)
+                    # print(len(firstNames))
+                    # print(len(lastNames))
+                    # print(len(courseVal))
+                    # print(len(instrVal))
+                    # print(len(hoursStudied))
+                    # print("------------------")
+                    pass
             except:
                 pass # last page
 
