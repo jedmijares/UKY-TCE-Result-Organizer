@@ -96,8 +96,7 @@ for filename in os.listdir('./PDFs'):
                     for num in range(len(courseTitles)):
                         worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num], filename])
                         currentLine += 1
-                else:
-                    # print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
+                else: # if data was missing
                     if len(courseCodes) == len(courseSubjects) == len(courseTitles):
                         for num in range(len(courseTitles)):
                             # place a record of course so people can look it up in the PDF
