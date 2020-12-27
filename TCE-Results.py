@@ -6,6 +6,9 @@ import xlsxwriter
 import re
 import sys
 
+if os.path.exists("TCE-Results.xlsx"):
+  os.remove("TCE-Results.xlsx")
+
 # Create a workbook and add a worksheet.
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
 worksheet = workbook.add_worksheet()
@@ -39,9 +42,9 @@ urls = [
     'https://web.archive.org/web/20201227164529if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202018%20Public%20Results.pdf',
     # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%202018%20Public%20Results.pdf'
 ]
-
-for url in urls:
-    wget.download(url)
+if not os.path.isdir("./PDFs"):
+    for url in urls:
+        wget.download(url, "./PDFs")
 
 for filename in os.listdir('./PDFs'):
     if filename.endswith('.pdf'):
@@ -113,5 +116,3 @@ for filename in os.listdir('./PDFs'):
                     # pass
 
 workbook.close()
-
-# os.rmdir('./temp')

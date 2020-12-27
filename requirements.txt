@@ -1,3 +1,4 @@
 textract
 XlsxWriter
 requests
+wget
