@@ -9,11 +9,13 @@ import re
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
 worksheet = workbook.add_worksheet()
 
-worksheet.add_table('A1:H2', {'columns': [{'header': 'Subject'},
+worksheet.add_table('A1:J2', {'columns': [{'header': 'Subject'},
                                           {'header': 'Course Code'},
                                           {'header': 'Course Title'},
                                           {'header': 'First Name'},
                                           {'header': 'Last Name'},
+                                          {'header': 'Year'},
+                                          {'header': 'Section'},
                                           {'header': 'Course Rating'},
                                           {'header': 'Instructor Rating'},
                                           {'header': 'Average Hours Studied'},
@@ -53,62 +55,39 @@ for filename in os.listdir('./PDFs'):
 
         for page in pages:
             sections = page.split('\n\n')
-            # print(len(sections))
             try:
                 courseNames = sections[0].split('\n')
-                # for name in courseNames:
-                #     if(name.count('-') < 2):
-                #         courseNames.remove(name)
-                # courseCodes[]
+                years = []
+                classSections = []
                 courseSubjects = []
                 courseCodes = []
                 courseTitles = []
                 for name in courseNames:
-                    # print(int(name))
-                    courseCodes.append(re.search(r'\d+', name).group())
-                    courseTitles.append(name.split(' ‐ ')[-1])
-                    courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
+                    if ' ‐ ' in name:
+                        courseCodes.append(re.search(r'\d+', name).group())
+                        courseTitles.append(name.split(' ‐ ')[-1])
+                        courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
+                        years.append(name.split(' ‐ ')[0].split('‐')[-1])
+                        classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
 
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
                 courseVal = sections[3].split('\n')
-                # print(courseVal)
-                # for val in courseVal:
-                #     try:
-                #         float(val)
-                #         break
-                #     except:
-                #         courseVal.remove(val)
-                #         print(val)
                 instrVal = sections[4].split('\n')
-                # for val in instrVal:
-                #     try:
-                #         float(val)
-                #         break
-                #     except:
-                #         instrVal.remove(val)
-                #         print(val)
                 hoursStudied = sections[5].split('\n')
-                # for val in hoursStudied:
-                #     try:
-                #         float(val)
-                #         break
-                #     except:
-                #         hoursStudied.remove(val)
-                #         print(val)
-                if len(courseCodes) == len(courseSubjects) == len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
+                if len(years) == len(classSections) == len(courseCodes) == len(courseSubjects) == len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
                     for num in range(len(courseTitles)):
-                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], courseVal[num], instrVal[num], hoursStudied[num]])
+                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num]])
                         currentLine += 1
                 else:
-                    # print(filename)
+                    print(filename)
                     # print(courseNames)
-                    # print(len(firstNames))
-                    # print(len(lastNames))
-                    # print(len(courseVal))
-                    # print(len(instrVal))
-                    # print(len(hoursStudied))
-                    # print("------------------")
+                    print(len(firstNames))
+                    print(len(lastNames))
+                    print(len(courseVal))
+                    print(len(years))
+                    print(len(classSections))
+                    print("------------------")
                     pass
             except:
                 pass # last page
