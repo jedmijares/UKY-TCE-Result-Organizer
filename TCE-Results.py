@@ -94,7 +94,10 @@ for filename in os.listdir('./PDFs'):
                 # prevent data from becoming misaligned if data is missing
                 if len(years) == len(classSections) == len(courseCodes) == len(courseSubjects) == len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
                     for num in range(len(courseTitles)):
-                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num], filename])
+                        if filename != "Spring%202015-2016%20WEB.pdf": # this file swaps column of instructor and course rating
+                            worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num], filename])
+                        else:
+                            worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], instrVal[num], courseVal[num], hoursStudied[num], filename])
                         currentLine += 1
                 else: # if data was missing
                     if len(courseCodes) == len(courseSubjects) == len(courseTitles):
