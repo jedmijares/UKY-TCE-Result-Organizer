@@ -11,18 +11,18 @@ if os.path.exists("TCE-Results.xlsx"):
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
 worksheet = workbook.add_worksheet()
 
-worksheet.add_table('A1:K2', {'columns': [{'header': 'Subject'},
-                                          {'header': 'Course Code'},
-                                          {'header': 'Course Title'},
-                                          {'header': 'First Name'},
-                                          {'header': 'Last Name'},
-                                          {'header': 'Year'},
-                                          {'header': 'Section'},
-                                          {'header': 'Course Rating'},
-                                          {'header': 'Instructor Rating'},
-                                          {'header': 'Average Hours Studied'},
-                                          {'header': 'Filename'},
-                                          ]})
+worksheet.add_table('A1:K30000', {'columns': [{'header': 'Subject'},
+                                              {'header': 'Course Code'},
+                                              {'header': 'Course Title'},
+                                              {'header': 'First Name'},
+                                              {'header': 'Last Name'},
+                                              {'header': 'Year'},
+                                              {'header': 'Section'},
+                                              {'header': 'Course Rating'},
+                                              {'header': 'Instructor Rating'},
+                                              {'header': 'Average Hours Studied'},
+                                              {'header': 'Filename'},
+                                              ]})
 
 currentLine = 2
 
