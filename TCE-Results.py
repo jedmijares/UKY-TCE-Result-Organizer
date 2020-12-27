@@ -4,6 +4,7 @@ import urllib.request
 import os
 import xlsxwriter
 import re
+import sys
 
 # Create a workbook and add a worksheet.
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
@@ -55,7 +56,7 @@ for filename in os.listdir('./PDFs'):
 
         for pageNumber, page in enumerate(pages):
             sections = page.split('\n\n')
-            try:
+            if sections != ['']:
                 courseNames = sections[0].split('\n')
                 years = []
                 classSections = []
@@ -68,8 +69,12 @@ for filename in os.listdir('./PDFs'):
                         courseTitles.append(name.split(' ‐ ')[-1])
                         courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
                         years.append(name.split(' ‐ ')[0].split('‐')[-1])
-                        classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
-
+                        if name.split(' ‐ ')[0][-4:] == "/010":
+                            classSections.append('010')
+                        elif name.split(' ‐ ')[0][-4:] == "/210":
+                            classSections.append('210')
+                        else:
+                            classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
                 courseVal = sections[3].split('\n')
@@ -81,7 +86,9 @@ for filename in os.listdir('./PDFs'):
                         currentLine += 1
                 else:
                     print("Trouble parsing page " + str(pageNumber + 1) + " of " + filename)
-                    # print(courseNames)
+                    # print(courseNames[0])
+                    # sys.exit()
+                    # quit()
                     # print(len(firstNames))
                     # print(len(lastNames))
                     # print(len(courseVal))
@@ -89,8 +96,6 @@ for filename in os.listdir('./PDFs'):
                     # print(len(classSections))
                     # print("------------------")
                     pass
-            except:
-                print("Trouble parsing page " + str(pageNumber + 1) + " of " + filename)
 
 workbook.close()
 
