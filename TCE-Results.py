@@ -54,6 +54,7 @@ for filename in os.listdir('./PDFs'):
 
         pages.pop(0) # remove first page
 
+        lastYear = ''
         for pageNumber, page in enumerate(pages):
             sections = page.split('\n\n')
             if sections != ['']:
@@ -68,7 +69,8 @@ for filename in os.listdir('./PDFs'):
                         courseCodes.append(re.search(r'\d+', name).group())
                         courseTitles.append(name.split(' ‐ ')[-1])
                         courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
-                        years.append(name.split(' ‐ ')[0].split('‐')[-1])
+                        lastYear = name.split(' ‐ ')[0].split('‐')[-1]
+                        years.append(lastYear)
                         if name.split(' ‐ ')[0][-4:] == "/010":
                             classSections.append('010')
                         elif name.split(' ‐ ')[0][-4:] == "/210":
@@ -76,12 +78,19 @@ for filename in os.listdir('./PDFs'):
                         else:
                             classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
                                 # classSections.append("not found")
-                    elif name == "ABT 461/BIO 461/ENT 461/FOR 461/001(INTRODUCTION TO POPULATION GENETICS)":
-                        classSections.append('001')
-                        years.append("2018030")
-                        courseCodes.append("461")
-                        courseTitles.append("INTRODUCTION TO POPULATION GENETICS")
-                        courseSubjects.append("ABT/BIO/ENT/FOR")
+                    elif "(" in name:
+                        classSections.append(name.split("(",1)[0][-3:])
+                        years.append(lastYear)
+                        courseCodes.append(name[4:7])
+                        courseTitles.append(name.split("(",1)[1][:-1])
+                        courseSubjects.append(name[:3])
+                        # pass
+                    else:
+                        courseTitles.append(name)
+                        years.append(lastYear)
+                        classSections.append("N/A")
+                        courseCodes.append("N/A")
+                        courseSubjects.append("N/A")
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
                 courseVal = sections[3].split('\n')
@@ -101,6 +110,7 @@ for filename in os.listdir('./PDFs'):
                     print("courseVal " + str(len(courseVal)))
                     print("years " + str(len(years)))
                     print("classSections " + str(len(classSections)))
+                    print("hoursStudied " + str(len(hoursStudied)))
                     print("------------------")
                     sys.exit()
                     pass
