@@ -5,3 +5,5 @@ This script downloads the University of Kentucky's published course evaluation d
 Missing data or irregular names can cause certain pages to not parse properly. In this case, that page will only save the course subject, code, and title, along with the filename, so the student can manually look up that course if needed.
 
 The header data on the first page of each document also messes with parsing and is not consistently formatted between files, so I simply remove the first page of each PDF.
+
+You can just check out the Excel output [here](https://github.com/jedmijares/UKY-TCE-Result-Organizer/releases/tag/v1.0).
