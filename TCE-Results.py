@@ -10,7 +10,7 @@ import sys
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
 worksheet = workbook.add_worksheet()
 
-worksheet.add_table('A1:J2', {'columns': [{'header': 'Subject'},
+worksheet.add_table('A1:K2', {'columns': [{'header': 'Subject'},
                                           {'header': 'Course Code'},
                                           {'header': 'Course Title'},
                                           {'header': 'First Name'},
@@ -20,6 +20,7 @@ worksheet.add_table('A1:J2', {'columns': [{'header': 'Subject'},
                                           {'header': 'Course Rating'},
                                           {'header': 'Instructor Rating'},
                                           {'header': 'Average Hours Studied'},
+                                          {'header': 'Filename'},
                                           ]})
 
 currentLine = 2
@@ -45,16 +46,9 @@ for filename in os.listdir('./PDFs'):
         text = textract.process('./PDFs/' + filename).decode("utf-8")
 
         pages = text.split(chr(12)) # this character splits pages
-        # for page in pages:
-        #     sections = page.split('\n\n')
-        #     for section in sections:
-        #         # print(section)
-        #         print("----------------------------------")
-        #     break
 
         pages.pop(0) # remove first page
 
-        lastYear = ''
         for pageNumber, page in enumerate(pages):
             sections = page.split('\n\n')
             if sections != ['']:
@@ -65,29 +59,26 @@ for filename in os.listdir('./PDFs'):
                 courseCodes = []
                 courseTitles = []
                 for name in courseNames:
-                    if ' ‐ ' in name:
+                    if ' ‐ ' in name: # typical
                         courseCodes.append(re.search(r'\d+', name).group())
                         courseTitles.append(name.split(' ‐ ')[-1])
                         courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
-                        lastYear = name.split(' ‐ ')[0].split('‐')[-1]
-                        years.append(lastYear)
+                        years.append(name.split(' ‐ ')[0].split('‐')[-1])
                         if name.split(' ‐ ')[0][-4:] == "/010":
                             classSections.append('010')
                         elif name.split(' ‐ ')[0][-4:] == "/210":
                             classSections.append('210')
                         else:
                             classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
-                                # classSections.append("not found")
-                    elif "(" in name:
+                    elif "(" in name: # exception of form "CS 321/MA 321/001(INTRO NUMERICAL METHODS)"
                         classSections.append(name.split("(",1)[0][-3:])
-                        years.append(lastYear)
-                        courseCodes.append(name[4:7])
+                        years.append("N/A")
+                        courseCodes.append(name.split()[1].split("/")[0])
                         courseTitles.append(name.split("(",1)[1][:-1])
-                        courseSubjects.append(name[:3])
-                        # pass
-                    else:
+                        courseSubjects.append(name.split()[0])
+                    else: # exception
                         courseTitles.append(name)
-                        years.append(lastYear)
+                        years.append("N/A")
                         classSections.append("N/A")
                         courseCodes.append("N/A")
                         courseSubjects.append("N/A")
@@ -96,24 +87,27 @@ for filename in os.listdir('./PDFs'):
                 courseVal = sections[3].split('\n')
                 instrVal = sections[4].split('\n')
                 hoursStudied = sections[5].split('\n')
+                # prevent data from becoming misaligned if data is missing
                 if len(years) == len(classSections) == len(courseCodes) == len(courseSubjects) == len(courseTitles) == len(firstNames) == len(lastNames) == len(courseVal) == len(instrVal) == len(hoursStudied):
                     for num in range(len(courseTitles)):
-                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num]])
+                        worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num], filename])
                         currentLine += 1
                 else:
-                    print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename)
+                    print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
                     # print(courseNames[0])
                     # print(firstNames)
                     # print(lastNames)
-                    print("firstNames " + str(len(firstNames)))
-                    print("lastNames " + str(len(lastNames)))
-                    print("courseVal " + str(len(courseVal)))
-                    print("years " + str(len(years)))
-                    print("classSections " + str(len(classSections)))
-                    print("hoursStudied " + str(len(hoursStudied)))
+                    # print(courseVal)
+                    # print(instrVal)
+                    # print("years " + str(len(years)))
+                    # print("instrVal " + str(len(instrVal)))
+                    # print("courseVal " + str(len(courseVal)))
+                    # print("courseTitles " + str(len(courseTitles)))
+                    # print("classSections " + str(len(classSections)))
+                    # print("courseSubjects " + str(len(courseSubjects)))
                     print("------------------")
-                    sys.exit()
-                    pass
+                    # sys.exit()
+                    # pass
 
 workbook.close()
 
