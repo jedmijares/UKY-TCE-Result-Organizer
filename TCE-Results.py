@@ -1,13 +1,11 @@
 import textract
 import wget
-import urllib.request
 import os
 import xlsxwriter
 import re
-import sys
 
 if os.path.exists("TCE-Results.xlsx"):
-  os.remove("TCE-Results.xlsx")
+    os.remove("TCE-Results.xlsx")
 
 # Create a workbook and add a worksheet.
 workbook = xlsxwriter.Workbook('TCE-Results.xlsx')
@@ -49,7 +47,6 @@ if not os.path.isdir("./PDFs"):
 
 for filename in os.listdir('./PDFs'):
     if filename.endswith('.pdf'):
-        # print(filename)
         text = textract.process('./PDFs/' + filename).decode("utf-8")
 
         pages = text.split(chr(12)) # this character splits pages
@@ -85,10 +82,10 @@ for filename in os.listdir('./PDFs'):
                         courseSubjects.append(name.split()[0])
                     else: # exception
                         courseTitles.append(name)
-                        years.append("N/A")
-                        classSections.append("N/A")
-                        courseCodes.append("N/A")
-                        courseSubjects.append("N/A")
+                        years.append("Couldn't Parse")
+                        classSections.append("Couldn't Parse")
+                        courseCodes.append("Couldn't Parse")
+                        courseSubjects.append("Couldn't Parse")
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
                 courseVal = sections[3].split('\n')
@@ -100,18 +97,24 @@ for filename in os.listdir('./PDFs'):
                         worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num], filename])
                         currentLine += 1
                 else:
-                    print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
-                    print("courseSubjects " + str(len(courseSubjects)))
-                    print("courseCodes " + str(len(courseCodes)))
-                    print("courseTitles " + str(len(courseTitles)))
-                    print("firstNames " + str(len(firstNames)))
-                    print("lastNames " + str(len(lastNames)))
-                    print("years " + str(len(years)))
-                    print("classSections " + str(len(classSections)))
-                    print("courseVal " + str(len(courseVal)))
-                    print("instrVal " + str(len(instrVal)))
-                    print("hoursStudied " + str(len(hoursStudied)))
-                    print("------------------")
-                    # pass
+                    # print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
+                    if len(courseCodes) == len(courseSubjects) == len(courseTitles):
+                        for num in range(len(courseTitles)):
+                            # place a record of course so people can look it up in the PDF
+                            worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], "Couldn't Parse", "Couldn't Parse", "Couldn't Parse", "Couldn't Parse", "Couldn't Parse", "Couldn't Parse", "Couldn't Parse", filename])
+                            currentLine += 1
+                    else:
+                        print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
+                    # print("courseSubjects " + str(len(courseSubjects)))
+                    # print("courseCodes " + str(len(courseCodes)))
+                    # print("courseTitles " + str(len(courseTitles)))
+                    # print("firstNames " + str(len(firstNames)))
+                    # print("lastNames " + str(len(lastNames)))
+                    # print("years " + str(len(years)))
+                    # print("classSections " + str(len(classSections)))
+                    # print("courseVal " + str(len(courseVal)))
+                    # print("instrVal " + str(len(instrVal)))
+                    # print("hoursStudied " + str(len(hoursStudied)))
+                    # print("------------------")
 
 workbook.close()
