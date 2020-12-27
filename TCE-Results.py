@@ -43,6 +43,7 @@ urls = [
     # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%202018%20Public%20Results.pdf'
 ]
 if not os.path.isdir("./PDFs"):
+    os.mkdir("./PDFs")
     for url in urls:
         wget.download(url, "./PDFs")
 
@@ -100,19 +101,17 @@ for filename in os.listdir('./PDFs'):
                         currentLine += 1
                 else:
                     print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
-                    # print(courseNames[0])
-                    # print(firstNames)
-                    # print(lastNames)
-                    # print(courseVal)
-                    # print(instrVal)
-                    # print("years " + str(len(years)))
-                    # print("instrVal " + str(len(instrVal)))
-                    # print("courseVal " + str(len(courseVal)))
-                    # print("courseTitles " + str(len(courseTitles)))
-                    # print("classSections " + str(len(classSections)))
-                    # print("courseSubjects " + str(len(courseSubjects)))
+                    print("courseSubjects " + str(len(courseSubjects)))
+                    print("courseCodes " + str(len(courseCodes)))
+                    print("courseTitles " + str(len(courseTitles)))
+                    print("firstNames " + str(len(firstNames)))
+                    print("lastNames " + str(len(lastNames)))
+                    print("years " + str(len(years)))
+                    print("classSections " + str(len(classSections)))
+                    print("courseVal " + str(len(courseVal)))
+                    print("instrVal " + str(len(instrVal)))
+                    print("hoursStudied " + str(len(hoursStudied)))
                     print("------------------")
-                    # sys.exit()
                     # pass
 
 workbook.close()
