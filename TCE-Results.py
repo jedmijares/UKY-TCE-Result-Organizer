@@ -104,16 +104,5 @@ for filename in os.listdir('./PDFs'):
                             currentLine += 1
                     else:
                         print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename + ", skipping")
-                    # print("courseSubjects " + str(len(courseSubjects)))
-                    # print("courseCodes " + str(len(courseCodes)))
-                    # print("courseTitles " + str(len(courseTitles)))
-                    # print("firstNames " + str(len(firstNames)))
-                    # print("lastNames " + str(len(lastNames)))
-                    # print("years " + str(len(years)))
-                    # print("classSections " + str(len(classSections)))
-                    # print("courseVal " + str(len(courseVal)))
-                    # print("instrVal " + str(len(instrVal)))
-                    # print("hoursStudied " + str(len(hoursStudied)))
-                    # print("------------------")
 
 workbook.close()
