@@ -35,10 +35,10 @@ urls = [
     'https://web.archive.org/web/20201227164133if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202016-2017.pdf',
     'https://web.archive.org/web/20201227172722if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%20I%202016-2017%20WEB.pdf',
     'https://web.archive.org/web/20201227164243if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%20II%202016-2017%20WEB.pdf',
-    'https://web.archive.org/web/20190714013335if_/http://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Fall%202017%202018%20WEB.pdf',
+    'https://web.archive.org/web/20190714013335if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Fall%202017%202018%20WEB.pdf',
     'https://web.archive.org/web/20201227164415if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Winter%202017-2018%20WEB1.pdf',
     'https://web.archive.org/web/20201227164529if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Spring%202018%20Public%20Results.pdf',
-    # 'https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%202018%20Public%20Results.pdf'
+    "https://web.archive.org/web/20201227200408if_/https://www.uky.edu/eval/sites/www.uky.edu.eval/files/TCE/Summer%202018%20Public%20Results.pdf"
 ]
 if not os.path.isdir("./PDFs"):
     os.mkdir("./PDFs")
