@@ -75,6 +75,13 @@ for filename in os.listdir('./PDFs'):
                             classSections.append('210')
                         else:
                             classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
+                                # classSections.append("not found")
+                    elif name == "ABT 461/BIO 461/ENT 461/FOR 461/001(INTRODUCTION TO POPULATION GENETICS)":
+                        classSections.append('001')
+                        years.append("2018030")
+                        courseCodes.append("461")
+                        courseTitles.append("INTRODUCTION TO POPULATION GENETICS")
+                        courseSubjects.append("ABT/BIO/ENT/FOR")
                 firstNames = sections[1].split('\n')
                 lastNames = sections[2].split('\n')
                 courseVal = sections[3].split('\n')
@@ -85,16 +92,17 @@ for filename in os.listdir('./PDFs'):
                         worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num]])
                         currentLine += 1
                 else:
-                    print("Trouble parsing page " + str(pageNumber + 1) + " of " + filename)
+                    print("Trouble parsing page containing " + courseNames[0].split(' ‐ ')[0] + " of " + filename)
                     # print(courseNames[0])
-                    # sys.exit()
-                    # quit()
-                    # print(len(firstNames))
-                    # print(len(lastNames))
-                    # print(len(courseVal))
-                    # print(len(years))
-                    # print(len(classSections))
-                    # print("------------------")
+                    # print(firstNames)
+                    # print(lastNames)
+                    print("firstNames " + str(len(firstNames)))
+                    print("lastNames " + str(len(lastNames)))
+                    print("courseVal " + str(len(courseVal)))
+                    print("years " + str(len(years)))
+                    print("classSections " + str(len(classSections)))
+                    print("------------------")
+                    sys.exit()
                     pass
 
 workbook.close()
