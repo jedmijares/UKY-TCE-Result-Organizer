@@ -53,7 +53,7 @@ for filename in os.listdir('./PDFs'):
 
         pages.pop(0) # remove first page
 
-        for page in pages:
+        for pageNumber, page in enumerate(pages):
             sections = page.split('\n\n')
             try:
                 courseNames = sections[0].split('\n')
@@ -80,17 +80,17 @@ for filename in os.listdir('./PDFs'):
                         worksheet.write_row('A' + str(currentLine), [courseSubjects[num], courseCodes[num], courseTitles[num], firstNames[num], lastNames[num], years[num], classSections[num], courseVal[num], instrVal[num], hoursStudied[num]])
                         currentLine += 1
                 else:
-                    print(filename)
+                    print("Trouble parsing page " + str(pageNumber + 1) + " of " + filename)
                     # print(courseNames)
-                    print(len(firstNames))
-                    print(len(lastNames))
-                    print(len(courseVal))
-                    print(len(years))
-                    print(len(classSections))
-                    print("------------------")
+                    # print(len(firstNames))
+                    # print(len(lastNames))
+                    # print(len(courseVal))
+                    # print(len(years))
+                    # print(len(classSections))
+                    # print("------------------")
                     pass
             except:
-                pass # last page
+                print("Trouble parsing page " + str(pageNumber + 1) + " of " + filename)
 
 workbook.close()
 
