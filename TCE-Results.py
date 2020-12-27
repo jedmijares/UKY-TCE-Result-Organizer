@@ -76,7 +76,7 @@ for filename in os.listdir('./PDFs'):
                             classSections.append(name.split(' ‐ ')[0].split('‐')[-2])
                     elif "(" in name: # exception of form "CS 321/MA 321/001(INTRO NUMERICAL METHODS)"
                         classSections.append(name.split("(",1)[0][-3:])
-                        years.append("N/A")
+                        years.append("Couldn't Parse")
                         courseCodes.append(name.split()[1].split("/")[0])
                         courseTitles.append(name.split("(",1)[1][:-1])
                         courseSubjects.append(name.split()[0])
