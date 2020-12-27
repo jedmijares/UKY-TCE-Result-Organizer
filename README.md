@@ -1,6 +1,6 @@
 # UKY TCE Result Organizer
 
-This script downloads the University of Kentucky's published course evaluation data (available to students [here](https://www.uky.edu/eval/results/tce-results-students])) and places all the data in an Excel table. The original data is presented in PDF files, so this allows students to sort the data by course subject or instructor.
+This script downloads the University of Kentucky's published course evaluation data (available to students [here](https://www.uky.edu/eval/results/tce-results-students)) and places all the data in an Excel table. The original data is presented in PDF files, so this allows students to sort the data by course subject or instructor.
 
 Missing data or irregular names can cause certain pages to not parse properly. In this case, that page will only save the course subject, code, and title, along with the filename, so the student can manually look up that course if needed.
 
