@@ -1,5 +1,3 @@
 textract
 XlsxWriter
-# wget
-# urllib2
 requests
