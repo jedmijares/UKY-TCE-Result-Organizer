@@ -47,7 +47,7 @@ for filename in os.listdir('./PDFs'):
 
         pages = text.split(chr(12)) # this character splits pages
 
-        pages.pop(0) # remove first page
+        pages.pop(0) # remove first page (headers break parsing)
 
         for pageNumber, page in enumerate(pages):
             sections = page.split('\n\n')
@@ -59,7 +59,7 @@ for filename in os.listdir('./PDFs'):
                 courseCodes = []
                 courseTitles = []
                 for name in courseNames:
-                    if ' ‐ ' in name: # typical
+                    if ' ‐ ' in name: # typical format
                         courseCodes.append(re.search(r'\d+', name).group())
                         courseTitles.append(name.split(' ‐ ')[-1])
                         courseSubjects.append(re.sub(r'(\d+)', ' ', name).split()[0]) # convert numbers to space, then take what's before the first space
